@@ -10,7 +10,8 @@ describe("#starOutGrid", () => {
       ["D", "E", "F"],
       ["G", "H", "I"]
     ]);
-  });
+  })});
+
   it("should star-out row and col that has a star", function () {
     expect(starOutGrid([
       ["A", "B", "C"],
@@ -23,6 +24,7 @@ describe("#starOutGrid", () => {
       ["G", "H", "*"],
     ]);
   });
+  
   it("should work with multiple stars", function () {
     expect(starOutGrid([
       ["*", "B", "C"],
@@ -35,6 +37,7 @@ describe("#starOutGrid", () => {
       ["*", "H", "*"],
     ]);
   });
+  
   it("should work with non-square grids:", function () {
     expect(starOutGrid([
       ["*", "B", "C"],
@@ -49,4 +52,4 @@ describe("#starOutGrid", () => {
       ["*", "K", "*"],
     ]);
   });
-});
+
