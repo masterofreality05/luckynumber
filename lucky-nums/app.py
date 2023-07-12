@@ -35,26 +35,29 @@ def homepage():
 
 @app.route("/numberapi", methods=['GET','POST'])
 def get_lucky_number():
+    """recieves our AJAX request from the front end,"""
     ## here we will store the data of the users who use our lucky number app. 
     #this is just for reference, and we can use the data at a later point. 
     #when all of the inputted data is correct, we return the client with a lucky number and the fact
     #we can collect data like what type of facts people want to know the most. 
     form = LuckyNumberForm()
     #app.config['WTF_CSRF_ENABLED'] = False
-    print(request.data)
+    print("requested date now in flask", request.data)
+    converted = json.loads(bytes.decode(request.data))
+    print("CONVERRRRRTED IS", converted)
     
 
     if request.method == 'POST':
         #return jsonify(success='YEAH')
-        if valid_colors.index(form.color.data) == -1:
+        if valid_colors.index(converted.get('color')) == -1:
               print("error of color")
               form.color.errors = "Please pick a valid colour"
-              retrieved = jsonify(errors=form.errors) 
+              retrieved = jsonify(errors=form.color.errors) 
         
-        elif valid_dob(form.birth_year.data) != True:
+        elif valid_dob(converted.get('birth_year')) != True:
              print("error of dob")
              form.color.errors = "Please pick a valid birthyear between 1900 and 2000"
-             retrieved = jsonify(errors=form.errors)   
+             retrieved = jsonify(errors=form.birth_year.errors)   
         else:
              
              retrieved = get_number_fact()

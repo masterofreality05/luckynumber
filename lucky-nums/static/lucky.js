@@ -10,9 +10,8 @@ function processForm(evt) {
     var color = document.getElementById('color').value
     var type_of_fact = document.getElementById('type_of_fact').value
     
-
-    input = {name:name, birth_year:birth_year,email:email,color:color,type_of_fact:type_of_fact}
-    return input
+    output = {name:name, birth_year:birth_year,email:email,color:color,type_of_fact:type_of_fact}
+    return output
 }
 
 /** handleResponse: deal with response from our lucky-num API. */
