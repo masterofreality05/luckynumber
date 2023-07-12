@@ -1,12 +1,4 @@
-<!doctype html>
-<html>
-<head>
-  <title>LuckyNum</title>
-  <script src="https://unpkg.com/jquery"></script>
-</head>
-<body>
-
-  <form id="lucky-form">
+<form id="{{id}}" method="POST" action="">
     {{ form.hidden_tag() }}
     
     {% for field in form 
@@ -19,23 +11,5 @@
             {% endfor %}
         </p>
         {% endfor %}
-
-        <p>{{message}}</p>
         <button type="submit">Im feeling lucky!</button>
     </form>
-
-
-
-  
-    
-
-
-
-
-<div id="lucky-results"></div>
-
-<script src="https://unpkg.com/axios/dist/axios.js"></script>
-<script src="/static/lucky.js"></script>
-
-</body>
-</html>
