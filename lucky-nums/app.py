@@ -62,23 +62,28 @@ def get_lucky_number():
     form = LuckyNumberForm()
 
     print(form)
+    print(form.color.data)
+    print(form.name.data)
+    print(form.email.data)
+    print(form.birth_year.data)
 
 
     if form.validate_on_submit():
+        print(form.color.data)
+        print(form.name.data)
+        print(form.email.data)
+        print(form.birth_year.data)
         
-        print("validated!")
        
         if  form.color.data not in valid_colors:
-            print("error of color")
             form.color.errors = "Please pick a valid colour"
-            retrieved = form.color.errors
+            retrieved = jsonify(form.errors)
             print("error is ", retrieved)
               #currently returning undefined.
         
         elif valid_dob(form.birth_year.data) != True:
-          print("error of dob")
           form.color.errors = "Please pick a valid birthyear between 1900 and 2000"
-          retrieved = form.birth_year.errors 
+          retrieved = jsonify(form.errors)
          
           print("error is ", retrieved)
            #currently returning undefined
