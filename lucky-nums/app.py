@@ -1,15 +1,14 @@
 from flask import Flask, render_template, jsonify, redirect, url_for, request
+from flask_cors
 from flask_wtf.csrf import CSRFProtect
+
 from forms import LuckyNumberForm
 import urllib, json
 
 app = Flask(__name__)
-
-
 app.config['SECRET_KEY'] = "itsasecret"
-
+app.config['WTF_CSRF_ENABLED'] = False
 valid_colors = ['red','green','orange','blue']
-
 
 def valid_dob(number):
      number = int(number)
@@ -25,8 +24,15 @@ def get_number_fact():
      data = response.read()
      dict = json.loads(data)
      return dict
-     
 
+def get_dob_fact(dob):
+       """a function used when form submitted to retrieve a fact  based on the date of birth passed"""
+       url = f"http://numbersapi.com/{dob}/year?json"
+       response = urllib.request.urlopen(url)
+       data = response.read()
+       dict = json.loads(data)
+       return dict
+     
 @app.route("/")
 def homepage():
     """Show homepage."""
@@ -41,36 +47,35 @@ def get_lucky_number():
     #when all of the inputted data is correct, we return the client with a lucky number and the fact
     #we can collect data like what type of facts people want to know the most. 
     form = LuckyNumberForm()
-    #app.config['WTF_CSRF_ENABLED'] = False
-    print("requested date now in flask", request.data)
     converted = json.loads(bytes.decode(request.data))
-    print("CONVERRRRRTED IS", converted)
-    
+    birth_year = converted.get('birth_year')
+    color = converted.get('color').lower()
 
-    if request.method == 'POST':
-        #return jsonify(success='YEAH')
-        if valid_colors.index(converted.get('color')) == -1:
+
+    if form.validate_on_submit():
+        print("validated!")
+        if  color not in valid_colors:
               print("error of color")
               form.color.errors = "Please pick a valid colour"
               retrieved = jsonify(errors=form.color.errors) 
+              #currently returning undefined.
         
-        elif valid_dob(converted.get('birth_year')) != True:
+        elif valid_dob(birth_year) != True:
              print("error of dob")
              form.color.errors = "Please pick a valid birthyear between 1900 and 2000"
              retrieved = jsonify(errors=form.birth_year.errors)   
+             #currently returning undefined
         else:
              
-             retrieved = get_number_fact()
+             year_fact = get_dob_fact(birth_year)
+             number_fact = get_number_fact()
 
-        return retrieved
+        print(year_fact) #this is json
+        print(number_fact) #this is json
+        return [year_fact,number_fact]
     
-    print("validate error")
+
     return "csrf validation did not pass"
-
-
-
-        
-
 
  #we will process user form for information, confirming all valid.. then user can select fact type.
  #if all the information is valid, the user will recieve a randomized lucky number and a fact category of their choice. 
