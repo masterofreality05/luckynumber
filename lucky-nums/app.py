@@ -1,7 +1,7 @@
-from flask import Flask, render_template, jsonify, redirect, url_for, request
-from flask_cors
-from flask_wtf.csrf import CSRFProtect
 
+
+from flask import Flask, render_template, jsonify, redirect, url_for, request
+from flask_wtf import FlaskForm
 from forms import LuckyNumberForm
 import urllib, json
 
@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = "itsasecret"
 app.config['WTF_CSRF_ENABLED'] = False
 valid_colors = ['red','green','orange','blue']
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def valid_dob(number):
      number = int(number)
