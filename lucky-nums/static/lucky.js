@@ -18,23 +18,17 @@ function processForm(evt) {
 
 /** handleResponse: deal with response from our lucky-num API. */
 
-async function handleResponse(data) {
-    console.log("passed data is ", data)
-    const res = await axios.post("http://127.0.0.1:5000/numberapi", data)
-    console.log(res)
-    $('body').append(`<h1>Your birth year:</h1><br><p>${res.data[0].text}</p>`)
-    $('body').append(`<h1>Your lucky number, fun fact:</h1><br><p>${res.data[1].text}</p>`)
+async function handleResponse(res) {
+    console.log("passed data is ", res)
+   
+    $('body').append(`<h1>Your birth year:</h1><br><p>${res[0].text}</p>`)
+    $('body').append(`<h1>Your lucky number, fun fact:</h1><br><p>${res[0].text}</p>`)
 
     return res
 }
 
 
-/*$("#lucky-form").on("submit",function(e){
-    e.preventDefault()
-    handleResponse(processForm())
-});
 
-*/
 
 $("#lucky-form").submit(function(e) {
 
@@ -52,7 +46,12 @@ $("#lucky-form").submit(function(e) {
         {
           console.log(data)
           //alert(data.data); // show response from the php script.
+          handleResponse(data)
+          
+
         }
+       
     });
-    
+
+
 });
