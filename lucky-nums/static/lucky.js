@@ -45,7 +45,7 @@ $("#lucky-form").submit(function(e) {
     var actionUrl = form.attr('http://127.0.0.1:5000/numberapi');
     
     $.ajax({
-        type: "post",
+        type: "POST",
         url: actionUrl,
         data: form.serialize(), // serializes the form's elements.
         success: function(data)

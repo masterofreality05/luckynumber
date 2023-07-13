@@ -1,15 +1,18 @@
 
-
-from flask import Flask, render_template, jsonify, redirect, url_for, request
+from flask import Flask, render_template, jsonify, request
 from flask_wtf import FlaskForm
+from flask_cors import cross_origin, CORS
 from forms import LuckyNumberForm
 import urllib, json
 
+
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = "itsasecret"
 app.config['WTF_CSRF_ENABLED'] = False
 valid_colors = ['red','green','orange','blue']
-app.config['CORS_HEADERS'] = 'Content-Type'
+
+CORS(app)
 
 def valid_dob(number):
      number = int(number)
@@ -40,7 +43,8 @@ def homepage():
     form = LuckyNumberForm()
     return render_template("index.html", form=form)
 
-@app.route("/numberapi", methods=['GET','POST'])
+@app.route("/numberapi", methods=['POST'])
+@cross_origin()
 def get_lucky_number():
     """recieves our AJAX request from the front end,"""
     ## here we will store the data of the users who use our lucky number app. 
@@ -51,7 +55,6 @@ def get_lucky_number():
     converted = json.loads(bytes.decode(request.data))
     birth_year = converted.get('birth_year')
     color = converted.get('color').lower()
-
 
     if form.validate_on_submit():
         print("validated!")
