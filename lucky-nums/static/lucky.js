@@ -21,10 +21,19 @@ function processForm(evt) {
 async function handleResponse(res) {
     console.log("passed data is ", res)
    
-    $('body').append(`<h1>Your birth year:</h1><br><p>${res[0].text}</p>`)
-    $('body').append(`<h1>Your lucky number, fun fact:</h1><br><p>${res[0].text}</p>`)
 
-    return res
+    if(res.length >= 2){
+        $('#lucky-results').empty().append(`<h1>Your birth year:</h1><br><p>${res[0].text}</p><br>
+    <h1>Your lucky number is ${res[1].number}, fun fact:</h1><br><p>${res[1].text}</p>`)
+ 
+    } else {
+        console.log("validation error")
+ 
+        $('#lucky-results').empty().append(`<h1>${Object.values(res)}</h1>`)
+    }
+   
+
+
 }
 
 
@@ -33,8 +42,6 @@ async function handleResponse(res) {
 $("#lucky-form").submit(function(e) {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
-    console.log("running this form")
-
     var form = $(this);
     var actionUrl = form.attr('http://127.0.0.1:5000/numberapi');
     

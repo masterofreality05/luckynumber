@@ -61,11 +61,6 @@ def get_lucky_number():
     
     form = LuckyNumberForm()
 
-    print(form)
-    print(form.color.data)
-    print(form.name.data)
-    print(form.email.data)
-    print(form.birth_year.data)
 
 
     if form.validate_on_submit():
@@ -86,7 +81,7 @@ def get_lucky_number():
           retrieved = jsonify(form.errors)
          
           print("error is ", retrieved)
-           #currently returning undefined
+          
         else:
              
            year_fact = get_dob_fact(form.birth_year.data)
