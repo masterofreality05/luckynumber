@@ -13,6 +13,7 @@ app.config['WTF_CSRF_ENABLED'] = False
 valid_colors = ['red','green','orange','blue']
 
 CORS(app)
+cors = CORS(app, resources={r"/numberapi/*": {"origins": "*"}})
 
 def valid_dob(number):
      number = int(number)
@@ -43,40 +44,55 @@ def homepage():
     form = LuckyNumberForm()
     return render_template("index.html", form=form)
 
-@app.route("/numberapi", methods=['POST'])
+@app.route("/numberapi", methods=['GET','POST'])
 @cross_origin()
 def get_lucky_number():
     """recieves our AJAX request from the front end,"""
+    print("running????????????")
     ## here we will store the data of the users who use our lucky number app. 
     #this is just for reference, and we can use the data at a later point. 
     #when all of the inputted data is correct, we return the client with a lucky number and the fact
     #we can collect data like what type of facts people want to know the most. 
+   
+   # converted = json.loads(bytes.decode(request.data))
+    #birth_year = converted.get('birth_year')
+    #color = converted.get('color').lower()
+    
+    
     form = LuckyNumberForm()
-    converted = json.loads(bytes.decode(request.data))
-    birth_year = converted.get('birth_year')
-    color = converted.get('color').lower()
+
+    print(form)
+
 
     if form.validate_on_submit():
+        
         print("validated!")
-        if  color not in valid_colors:
-              print("error of color")
-              form.color.errors = "Please pick a valid colour"
-              retrieved = jsonify(errors=form.color.errors) 
+       
+        if  form.color.data not in valid_colors:
+            print("error of color")
+            form.color.errors = "Please pick a valid colour"
+            retrieved = form.color.errors
+            print("error is ", retrieved)
               #currently returning undefined.
         
-        elif valid_dob(birth_year) != True:
-             print("error of dob")
-             form.color.errors = "Please pick a valid birthyear between 1900 and 2000"
-             retrieved = jsonify(errors=form.birth_year.errors)   
-             #currently returning undefined
+        elif valid_dob(form.birth_year.data) != True:
+          print("error of dob")
+          form.color.errors = "Please pick a valid birthyear between 1900 and 2000"
+          retrieved = form.birth_year.errors 
+         
+          print("error is ", retrieved)
+           #currently returning undefined
         else:
              
-             year_fact = get_dob_fact(birth_year)
-             number_fact = get_number_fact()
+           year_fact = get_dob_fact(form.birth_year.data)
+           number_fact = get_number_fact()
+           retrieved = [year_fact, number_fact]
 
-        print(year_fact) #this is json
-        print(number_fact) #this is json
-        return [year_fact,number_fact]
+      #  print(year_fact) #this is json
+      #  print(number_fact) #this is json
+        return retrieved
+    
+    
     
 
     return "csrf validation did not pass"

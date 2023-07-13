@@ -45,12 +45,12 @@ $("#lucky-form").submit(function(e) {
     var actionUrl = form.attr('http://127.0.0.1:5000/numberapi');
     
     $.ajax({
-        type: "POST",
-        url: actionUrl,
+        type: 'post',
+        url: 'http://127.0.0.1:5000/numberapi',
         data: form.serialize(), // serializes the form's elements.
         success: function(data)
         {
-          alert(data); // show response from the php script.
+          alert(data.data); // show response from the php script.
         }
     });
     
